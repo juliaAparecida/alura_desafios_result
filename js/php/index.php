@@ -1,4 +1,13 @@
+<?php
+    $saida = '';
+    $limite = 10;
+    for ($i=1; $i < $limite; $i++) {
+        $saida .= "$i <br>";
+    }
+?>
+
 <!doctype html>
+
 <html lang="pt-br">
 
 <head>
@@ -14,6 +23,7 @@
     <p>Quem nunca contou até 10 né?</p>
     <hr>
     <div class="mt-3" id="saida"></div>
+    <?= $saida ?>
 </div>
 
 <style>
