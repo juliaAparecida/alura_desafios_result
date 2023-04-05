@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Buscar usuário Github</title>
+</head>
+<body>
+
+<!--<div class="card card-shadow">-->
+<!--  <div class="card-cover"></div>-->
+<!--  <div class="card-body card-body-column">-->
+<!--    <img src="${user.avatar_url}" alt="${user.name}" class="user-avatar">-->
+<!--    <h2 class="mt-3 mb-1 user-name">${user.name}</h2>-->
+<!--    <h5 class="m-0 user-id">@${user.login}</h5>-->
+<!--    <p class="user-bio mt-3">"${user.bio}"</p>-->
+<!--    <div class="card user-infor">-->
+<!--      <div class="card-body d-flex gap-5">-->
+<!--        <div class="user-numbers text-center">-->
+<!--          <div class="number">${user.followers}</div>-->
+<!--          <div class="text">Seguidores</div>-->
+<!--        </div>-->
+<!--        <div class="user-numbers text-center">-->
+<!--          <div class="number">${user.following}</div>-->
+<!--          <div class="text">Seguindo</div>-->
+<!--        </div>-->
+<!--        <div class="user-numbers text-center">-->
+<!--          <div class="number">${user.public_repos}</div>-->
+<!--          <div class="text">Repositórios</div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+
+<h1>Busca em API</h1>
+<p>Vamos acessar a API do GitHub passando um usuário e puxar informações.</p>
+<hr>
+
+<form class="input-group mb-3">
+  <span class="input-group-text">@</span>
+  <input type="text" class="form-control" id="username" placeholder="Username do GitHub">
+  <button class="btn btn-outline-secondary" type="submit" id="profile">Buscar!</button>
+</form>
+
+<div id="loading" class="spinner-border d-none" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div>
+<div class="mt-3" id="saida"></div>
+
+<style>
+
+  .card-shadow {
+  box-shadow: 0 12px 13px rgb(0 0 0 / 16%), 0 12px 13px rgb(0 0 0 / 16%);
+  }
+  .card {
+  position: relative;
+  }
+  .card-cover {
+  height: 120px;
+  width: 100%;
+  background: #FF5C5C;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  }
+  .card-body-column {
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  }
+
+  .user-avatar {
+  border-radius: 100%;
+  width: 160px;
+  height: 160px;
+  }
+  .user-id {
+  color: #797979;
+  font-weight: normal;
+  }
+  .user-infor {
+  border-top: 2px solid #FF5C5C;
+  }
+  .user-numbers .number {
+  font-weight: bold;
+  font-size: 1.25rem;
+  }
+  .user-numbers .text {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.52);
+  letter-spacing: 0.5px;
+  }
+</style>
+
+<script>
+    (function (){
+        const username = document.getElementById("username");
+        const profile = document.getElementById("profile");
+        const url = "https://api.github.com/users";
+        const client_id = "7532c4eea1dcd663fe80";
+        const client_secret = "c957f7e3cb8e87d4c7246170892e16fdf17e5ce4";
+
+        async function getUser(user) {
+            const profileResponse = await fetch(`${url}/${user}?client_id=${client_id}&client_secret=${client_secret}`);
+
+            const profile = profileResponse.json();
+
+            return profile;
+        }
+
+        function showProfile(user){
+            profile.innerHtml =  `
+        <div class="card card-shadow">
+          <div class="card-cover"></div>
+          <div class="card-body card-body-column">
+            <img src="${user.avatar_url}" alt="${user.name}" class="user-avatar">
+            <h2 class="mt-3 mb-1 user-name">${user.name}</h2>
+            <h5 class="m-0 user-id">@${user.login}</h5>
+            <p class="user-bio mt-3">"${user.bio}"</p>
+            <div class="card user-infor">
+              <div class="card-body d-flex gap-5">
+                <div class="user-numbers text-center">
+                  <div class="number">${user.followers}</div>
+                  <div class="text">Seguidores</div>
+                </div>
+                <div class="user-numbers text-center">
+                  <div class="number">${user.following}</div>
+                  <div class="text">Seguindo</div>
+                </div>
+                <div class="user-numbers text-center">
+                  <div class="number">${user.public_repos}</div>
+                  <div class="text">Repositórios</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>  `
+        }
+        username.addEventListener("keyup", (e) =>{
+            const user = e.target.value;
+
+            if (user.length > 0){
+                getUser(user).then(res => showProfile(res));
+            }
+            });
+        })();
+</script>
+</body>
+ </html>
